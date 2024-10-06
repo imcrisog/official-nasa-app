@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import Interface from './interface';
 
-const Planets = [
+export const Planets = [
   {
     "name": "Sun",
+    "desc": "The Sun is the star at the center of the Solar System. It is a nearly perfect sphere of hot plasma.",
     "scale": 3,
     "orbitRadius": null,
     "position": 0,
@@ -17,7 +19,8 @@ const Planets = [
     },
   },
   {
-    "name": "Mercurio",
+    "name": "Mercury",
+    "desc": "Mercury is the smallest and innermost planet in the Solar System. It is the closest planet to the Sun and the second-closest planet to the Earth.",
     "scale": 17,
     "orbitRadius": 190,
     "position": 30,
@@ -35,6 +38,7 @@ const Planets = [
   },
   {
     "name": "Venus",
+    "desc": "Venus is the second planet from the Sun and the brightest object in the night sky.",
     "scale": 25,
     "orbitRadius": 300,
     "position": 90,
@@ -51,7 +55,8 @@ const Planets = [
     }
   },
   {
-    "name": "Tierra",
+    "name": "Earth",
+    "desc": "Earth is the third planet from the Sun and the only astronomical object known to harbor life.",
     "scale": 1,
     "orbitRadius": 460,
     "position": 160,
@@ -69,7 +74,8 @@ const Planets = [
   },
 
   {
-    "name": "Marte",
+    "name": "Mars",
+    "desc": "Mars is the fourth planet from the Sun and the second-smallest planet in the Solar System.",
     "scale": 1,
     "orbitRadius": 590,
     "position": 160,
@@ -87,6 +93,7 @@ const Planets = [
   },
   {
     "name": "Jupiter",
+    "desc": "Jupiter is the largest planet in the Solar System. It is a gas giant with a mass one-thousandth that of the Sun.",
     "scale": 86,
     "orbitRadius": 950,
     "position": 160,
@@ -103,7 +110,8 @@ const Planets = [
     }
   },
   {
-    "name": "Saturno",
+    "name": "Saturn",
+    "desc": "Saturn is the sixth planet from the Sun and the second-largest planet in the Solar System.",
     "scale": 76,
     "orbitRadius": 1500,
     "position": 160,
@@ -120,7 +128,8 @@ const Planets = [
     }
   },
   {
-    "name": "Urano",
+    "name": "Uranus",
+    "desc": "Uranus is the seventh planet from the Sun and the third-largest planet in the Solar System.",
     "scale": 58,
     "orbitRadius": 2000,
     "position": 160,
@@ -137,7 +146,8 @@ const Planets = [
     }
   },
   {
-    "name": "Neptuno",
+    "name": "Neptune",
+    "desc": "Neptune is the eighth and farthest known planet from the Sun. It is named after the Roman god of the sea, Neptune.",
     "scale": 58,
     "orbitRadius": 2600,
     "position": 160,
@@ -223,7 +233,7 @@ const Home = () => {
         model.scale.set(planet.scale, planet.scale, planet.scale)
         model.position.set(planet.position, -1, 0);
   
-        if (planet.name !== "sun") {
+        if (planet.name !== "Sun") {
           let orbitRadius = planet.orbitRadius
 
           let pts = new THREE.Path().absarc(0, 0, orbitRadius, 0, Math.PI * 2).getPoints(90);
@@ -238,7 +248,7 @@ const Home = () => {
         const animate = () => {
           r_id.push(requestAnimationFrame(animate));
           model.rotation.y = planet.speedRotate.negative ? model.rotation.y - planet.speedRotate.value : model.rotation.y + planet.speedRotate.value;
-          if (planet.name !== "sun") {
+          if (planet.name !== "Sun") {
             let timestamp = Date.now() * 0.0001;
             model.position.set(Math.cos(timestamp * planet.speed) * planet.orbitRadius, -1, Math.sin(timestamp * planet.speed) * planet.orbitRadius)
           }
@@ -259,7 +269,7 @@ const Home = () => {
 
   return <div>
     <h1 className='text-base'> NASA SPACE APP - VEDO TEAM - 0.1 SHOWCASE</h1>
-
+    <Interface />
     <div className='base' ref={mountRef} />
   </div>;
 };

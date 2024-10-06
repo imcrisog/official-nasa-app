@@ -32,3 +32,39 @@ body {
   border-radius: 10px;
   opacity: 0.8;
 }
+
+.fixed {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+
+.planetdiv {
+  background-color: rgba(22, 22, 22, 0.4);
+  margin: 1%;
+  min-width: 20rem;
+  max-width: 20rem;
+  padding: 0.5rem;
+  border-radius: 1rem;
+  transition: .3s height ease-in-out;
+  font-weight: 600;
+  background: 
+}
+
+summary {
+  gap: 1rem;
+  border: gray 1px solid;
+  border-left: transparent;
+  border-right: transparent;
+  padding: 0.3rem 0.2rem;
+}
+
+summary:hover {
+  color:orangered;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+details > p {
+  font-size: small;
+}
