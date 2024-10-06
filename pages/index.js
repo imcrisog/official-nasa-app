@@ -9,17 +9,12 @@ const Home = () => {
   const mountRef = useRef(null);
   const [animateEnabled, setAnimateEnabled] = useState(true);
 
-  let INTERSECTED;
+  let scene, camera, renderer, controls, INTERSECTED;
   let r_id = [];
 
-  const cancelAllAnimations = () => {
-    r_id.forEach(r => {
-      cancelAnimationFrame(r)
-    })
-  }
-  
   function onClick(event, camera, scene) {
     event.preventDefault();
+
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
 
@@ -36,13 +31,12 @@ const Home = () => {
     } else {
         INTERSECTED = null;
     }
-    
   }
 
   useEffect(() => {
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
-    const renderer = new THREE.WebGLRenderer();
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+    renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     if (mountRef.current) {
@@ -59,7 +53,7 @@ const Home = () => {
       scene.background = texture;  
     });
 
-    const controls = new OrbitControls(camera, renderer.domElement); 
+    controls = new OrbitControls(camera, renderer.domElement); 
     controls.autoRotate = true
 
     renderer.domElement.addEventListener('click', (event) => onClick(event, camera, scene), false);
@@ -120,7 +114,7 @@ const Home = () => {
   }, []);
 
   return <div>
-    <h1 className='text-base'> NASA SPACE APP - VEDO TEAM - 0.1 SHOWCASE</h1>
+    <h1 className='text-base'> NASA SPACE APP - VEDO TEAM - 0.4 SHOWCASE</h1>
       <Interface />
     <div className='base' ref={mountRef} />
   </div>;
