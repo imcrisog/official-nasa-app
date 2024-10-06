@@ -246,13 +246,13 @@ const Home = () => {
       mountRef.current.appendChild(renderer.domElement);
     }
 
-    camera.position.set(100, 100, 300);
+    camera.position.set(100, 100, 500);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 1);
     scene.add(ambientLight);
 
     const textureLoader = new THREE.TextureLoader();
-    textureLoader.load('./public/360_F_461793247_aTvjPN7O4wuJiYieweyxzaO1K82y0cHb.jpg', (texture) => {
+    textureLoader.load('./background.jpg', (texture) => {
       scene.background = texture;  
     });
 
@@ -317,7 +317,7 @@ const Home = () => {
   }, []);
 
   return <div>
-    <h1 className='text-base'> NASA SPACE APP - VEDO TEAM - 0.1 SHOWCASE</h1>
+    <h1 className='text-base'> NASA SPACE APP - VEDO TEAM - 0.3 SHOWCASE</h1>
 
     <div className='base' ref={mountRef} />
   </div>;
