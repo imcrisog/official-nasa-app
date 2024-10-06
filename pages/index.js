@@ -19,8 +19,13 @@ const Planets = [
   {
     "name": "Mercurio",
     "scale": 17,
-    "orbitRadius": 190,
-    "position": 30,
+    "orbit": {
+      "x": 190,
+      "z": 190,
+      "centerX": 0,
+      "centerZ": 0
+    },
+    "position": 150,
     "speed": 2,
     "filename": "./mercurio.gltf",
     "speedRotate": {
@@ -36,6 +41,12 @@ const Planets = [
   {
     "name": "Venus",
     "scale": 25,
+    "orbit": {
+      "x": 300,
+      "z": 300,
+      "centerX": 0,
+      "centerZ": 0
+    },
     "orbitRadius": 300,
     "position": 90,
     "speed": 2.5,
@@ -53,6 +64,12 @@ const Planets = [
   {
     "name": "Tierra",
     "scale": 1,
+    "orbit": {
+      "x": 460,
+      "z": 460,
+      "centerX": 0,
+      "centerZ": 0
+    },
     "orbitRadius": 460,
     "position": 160,
     "speed": 5,
@@ -71,6 +88,12 @@ const Planets = [
   {
     "name": "Marte",
     "scale": 1,
+    "orbit": {
+      "x": 590,
+      "z": 590,
+      "centerX": 0,
+      "centerZ": 0
+    },
     "orbitRadius": 590,
     "position": 160,
     "speed": 2.1,
@@ -88,6 +111,12 @@ const Planets = [
   {
     "name": "Jupiter",
     "scale": 86,
+    "orbit": {
+      "x": 950,
+      "z": 950,
+      "centerX": 0,
+      "centerZ": 0
+    },
     "orbitRadius": 950,
     "position": 160,
     "speed": 0.7,
@@ -105,6 +134,12 @@ const Planets = [
   {
     "name": "Saturno",
     "scale": 76,
+    "orbit": {
+      "x": 500,
+      "z": 1500,
+      "centerX": 0,
+      "centerZ": 0
+    },
     "orbitRadius": 1500,
     "position": 160,
     "speed": 0.5,
@@ -122,6 +157,12 @@ const Planets = [
   {
     "name": "Urano",
     "scale": 58,
+    "orbit": {
+      "x": 2000,
+      "z": 2000,
+      "centerX": 0,
+      "centerZ": 0
+    },
     "orbitRadius": 2000,
     "position": 160,
     "speed": 0.3,
@@ -139,6 +180,12 @@ const Planets = [
   {
     "name": "Neptuno",
     "scale": 58,
+    "orbit": {
+      "x": 2600,
+      "z": 2600,
+      "centerX": 0,
+      "centerZ": 0
+    },
     "orbitRadius": 2600,
     "position": 160,
     "speed": 0.2,
@@ -223,24 +270,35 @@ const Home = () => {
         model.scale.set(planet.scale, planet.scale, planet.scale)
         model.position.set(planet.position, -1, 0);
   
-        if (planet.name !== "sun") {
-          let orbitRadius = planet.orbitRadius
+        if (planet.name !== "Sun") {
+          const points = [];
+          const segments = 90;
+          const orbitRadiusX = planet.orbit.x;
+          const orbitRadiusZ = planet.orbit.z;
 
-          let pts = new THREE.Path().absarc(0, 0, orbitRadius, 0, Math.PI * 2).getPoints(90);
-          let g = new THREE.BufferGeometry().setFromPoints(pts);
-          let m = new THREE.LineBasicMaterial(planet.lineMaterial);
-          g.rotateX(- Math.PI / 2);
-          let l = new THREE.Line(g, m);
-          
-          scene.add(l);
+          const centerX = planet.orbit.centerX; 
+
+          for (let i = 0; i <= segments; i++) {
+              const theta = (i / segments) * Math.PI * 2;
+              const x = Math.cos(theta) * orbitRadiusX + centerX; 
+              const z = Math.sin(theta) * orbitRadiusZ + 0;
+              points.push(new THREE.Vector3(x, 0, z));
+          }
+
+          const path = new THREE.BufferGeometry().setFromPoints(points);
+
+          const lineMaterial = new THREE.LineBasicMaterial(planet.lineMaterial);
+          const ellipseLine = new THREE.Line(path, lineMaterial);
+
+          scene.add(ellipseLine);
         }
 
         const animate = () => {
           r_id.push(requestAnimationFrame(animate));
           model.rotation.y = planet.speedRotate.negative ? model.rotation.y - planet.speedRotate.value : model.rotation.y + planet.speedRotate.value;
-          if (planet.name !== "sun") {
+          if (planet.name !== "Sun") {
             let timestamp = Date.now() * 0.0001;
-            model.position.set(Math.cos(timestamp * planet.speed) * planet.orbitRadius, -1, Math.sin(timestamp * planet.speed) * planet.orbitRadius)
+            model.position.set(Math.cos(timestamp * planet.speed) * planet.orbit.x + planet.orbit.centerX, -1, Math.sin(timestamp * planet.speed) * planet.orbit.z)
           }
           renderer.render(scene, camera);
         };
