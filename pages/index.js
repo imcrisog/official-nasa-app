@@ -22,8 +22,13 @@ export const Planets = [
     "name": "Mercury",
     "desc": "Mercury is the smallest and innermost planet in the Solar System. It is the closest planet to the Sun and the second-closest planet to the Earth.",
     "scale": 17,
-    "orbitRadius": 190,
-    "position": 30,
+    "orbit": {
+      "x": 190,
+      "z": 190,
+      "centerX": 0,
+      "centerZ": 0
+    },
+    "position": 150,
     "speed": 2,
     "filename": "./mercurio.gltf",
     "speedRotate": {
@@ -40,6 +45,12 @@ export const Planets = [
     "name": "Venus",
     "desc": "Venus is the second planet from the Sun and the brightest object in the night sky.",
     "scale": 25,
+    "orbit": {
+      "x": 300,
+      "z": 300,
+      "centerX": 0,
+      "centerZ": 0
+    },
     "orbitRadius": 300,
     "position": 90,
     "speed": 2.5,
@@ -58,6 +69,12 @@ export const Planets = [
     "name": "Earth",
     "desc": "Earth is the third planet from the Sun and the only astronomical object known to harbor life.",
     "scale": 1,
+    "orbit": {
+      "x": 460,
+      "z": 460,
+      "centerX": 0,
+      "centerZ": 0
+    },
     "orbitRadius": 460,
     "position": 160,
     "speed": 5,
@@ -77,6 +94,12 @@ export const Planets = [
     "name": "Mars",
     "desc": "Mars is the fourth planet from the Sun and the second-smallest planet in the Solar System.",
     "scale": 1,
+    "orbit": {
+      "x": 590,
+      "z": 590,
+      "centerX": 0,
+      "centerZ": 0
+    },
     "orbitRadius": 590,
     "position": 160,
     "speed": 2.1,
@@ -95,6 +118,12 @@ export const Planets = [
     "name": "Jupiter",
     "desc": "Jupiter is the largest planet in the Solar System. It is a gas giant with a mass one-thousandth that of the Sun.",
     "scale": 86,
+    "orbit": {
+      "x": 950,
+      "z": 950,
+      "centerX": 0,
+      "centerZ": 0
+    },
     "orbitRadius": 950,
     "position": 160,
     "speed": 0.7,
@@ -113,6 +142,12 @@ export const Planets = [
     "name": "Saturn",
     "desc": "Saturn is the sixth planet from the Sun and the second-largest planet in the Solar System.",
     "scale": 76,
+    "orbit": {
+      "x": 1500,
+      "z": 1500,
+      "centerX": 0,
+      "centerZ": 0
+    },
     "orbitRadius": 1500,
     "position": 160,
     "speed": 0.5,
@@ -131,6 +166,12 @@ export const Planets = [
     "name": "Uranus",
     "desc": "Uranus is the seventh planet from the Sun and the third-largest planet in the Solar System.",
     "scale": 58,
+    "orbit": {
+      "x": 2000,
+      "z": 2000,
+      "centerX": 0,
+      "centerZ": 0
+    },
     "orbitRadius": 2000,
     "position": 160,
     "speed": 0.3,
@@ -149,6 +190,12 @@ export const Planets = [
     "name": "Neptune",
     "desc": "Neptune is the eighth and farthest known planet from the Sun. It is named after the Roman god of the sea, Neptune.",
     "scale": 58,
+    "orbit": {
+      "x": 2600,
+      "z": 2600,
+      "centerX": 0,
+      "centerZ": 0
+    },
     "orbitRadius": 2600,
     "position": 160,
     "speed": 0.2,
@@ -208,13 +255,13 @@ const Home = () => {
       mountRef.current.appendChild(renderer.domElement);
     }
 
-    camera.position.set(100, 100, 300);
+    camera.position.set(100, 100, 500);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 1);
     scene.add(ambientLight);
 
     const textureLoader = new THREE.TextureLoader();
-    textureLoader.load('https://t3.ftcdn.net/jpg/07/11/66/58/360_F_711665817_dDzaSBW2nZEwYtaXnxzwd5OYcuBCW4A1.jpg', (texture) => {
+    textureLoader.load('./background.jpg', (texture) => {
       scene.background = texture;  
     });
 
@@ -234,15 +281,26 @@ const Home = () => {
         model.position.set(planet.position, -1, 0);
   
         if (planet.name !== "Sun") {
-          let orbitRadius = planet.orbitRadius
+          const points = [];
+          const segments = 90;
+          const orbitRadiusX = planet.orbit.x;
+          const orbitRadiusZ = planet.orbit.z;
 
-          let pts = new THREE.Path().absarc(0, 0, orbitRadius, 0, Math.PI * 2).getPoints(90);
-          let g = new THREE.BufferGeometry().setFromPoints(pts);
-          let m = new THREE.LineBasicMaterial(planet.lineMaterial);
-          g.rotateX(- Math.PI / 2);
-          let l = new THREE.Line(g, m);
-          
-          scene.add(l);
+          const centerX = planet.orbit.centerX; 
+
+          for (let i = 0; i <= segments; i++) {
+              const theta = (i / segments) * Math.PI * 2;
+              const x = Math.cos(theta) * orbitRadiusX + centerX; 
+              const z = Math.sin(theta) * orbitRadiusZ + 0;
+              points.push(new THREE.Vector3(x, 0, z));
+          }
+
+          const path = new THREE.BufferGeometry().setFromPoints(points);
+
+          const lineMaterial = new THREE.LineBasicMaterial(planet.lineMaterial);
+          const ellipseLine = new THREE.Line(path, lineMaterial);
+
+          scene.add(ellipseLine);
         }
 
         const animate = () => {
@@ -250,7 +308,7 @@ const Home = () => {
           model.rotation.y = planet.speedRotate.negative ? model.rotation.y - planet.speedRotate.value : model.rotation.y + planet.speedRotate.value;
           if (planet.name !== "Sun") {
             let timestamp = Date.now() * 0.0001;
-            model.position.set(Math.cos(timestamp * planet.speed) * planet.orbitRadius, -1, Math.sin(timestamp * planet.speed) * planet.orbitRadius)
+            model.position.set(Math.cos(timestamp * planet.speed) * planet.orbit.x + planet.orbit.centerX, -1, Math.sin(timestamp * planet.speed) * planet.orbit.z)
           }
           renderer.render(scene, camera);
         };
