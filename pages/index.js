@@ -135,7 +135,7 @@ const Planets = [
     "name": "Saturno",
     "scale": 76,
     "orbit": {
-      "x": 500,
+      "x": 1500,
       "z": 1500,
       "centerX": 0,
       "centerZ": 0
@@ -245,13 +245,13 @@ const Home = () => {
       mountRef.current.appendChild(renderer.domElement);
     }
 
-    camera.position.set(100, 100, 300);
+    camera.position.set(100, 100, 500);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 1);
     scene.add(ambientLight);
 
     const textureLoader = new THREE.TextureLoader();
-    textureLoader.load('https://t3.ftcdn.net/jpg/07/11/66/58/360_F_711665817_dDzaSBW2nZEwYtaXnxzwd5OYcuBCW4A1.jpg', (texture) => {
+    textureLoader.load('./background.jpg', (texture) => {
       scene.background = texture;  
     });
 
@@ -316,7 +316,7 @@ const Home = () => {
   }, []);
 
   return <div>
-    <h1 className='text-base'> NASA SPACE APP - VEDO TEAM - 0.1 SHOWCASE</h1>
+    <h1 className='text-base'> NASA SPACE APP - VEDO TEAM - 0.3 SHOWCASE</h1>
 
     <div className='base' ref={mountRef} />
   </div>;
