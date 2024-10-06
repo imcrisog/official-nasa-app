@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -14,7 +14,7 @@ const Planets = [
     "speedRotate": {
       "negative": true,
       "value": 0.03
-    }
+    },
   },
   {
     "name": "Mercurio",
@@ -26,6 +26,11 @@ const Planets = [
     "speedRotate": {
       "negative": false,
       "value": 0.056
+    },
+    "lineMaterial": {
+      "color": "violet",
+      "transparent": true,
+      "opacity": 1
     }
   },
   {
@@ -38,6 +43,11 @@ const Planets = [
     "speedRotate": {
       "negative": false,
       "value": 0.020
+    },
+    "lineMaterial": {
+      "color": "light-blue",
+      "transparent": true,
+      "opacity": 1
     }
   },
   {
@@ -48,8 +58,13 @@ const Planets = [
     "speed": 2.8,
     "filename": "./tierra.gltf",
     "speedRotate": {
-      "negative": false, 
-      "value": 0.086
+      "negative": false,
+      "value": 0.0086
+    },
+    "lineMaterial": {
+      "color": "brown",
+      "transparent": true,
+      "opacity": 1
     }
   },
 
@@ -63,6 +78,11 @@ const Planets = [
     "speedRotate": {
       "negative": false,
       "value": 0.087
+    },
+    "lineMaterial": {
+      "color": "red",
+      "transparent": true,
+      "opacity": 1
     }
   },
   {
@@ -75,7 +95,11 @@ const Planets = [
     "speedRotate": {
       "negative": false,
       "value": 0.035
-      
+    },
+    "lineMaterial": {
+      "color": "blue",
+      "transparent": true,
+      "opacity": 1
     }
   },
   {
@@ -88,6 +112,11 @@ const Planets = [
     "speedRotate": {
       "negative": false,
       "value": 0.038
+    },
+    "lineMaterial": {
+      "color": "green",
+      "transparent": true,
+      "opacity": 1
     }
   },
   {
@@ -100,6 +129,11 @@ const Planets = [
     "speedRotate": {
       "negative": false,
       "value": 0.061
+    },
+    "lineMaterial": {
+      "color": "purple",
+      "transparent": true,
+      "opacity": 1
     }
   },
   {
@@ -112,16 +146,52 @@ const Planets = [
     "speedRotate": {
       "negative": false,
       "value": 0.057
+    },
+    "lineMaterial": {
+      "color": "blue",
+      "transparent": true,
+      "opacity": 1
     }
   }
 ]
 
 const Home = () => {
   const mountRef = useRef(null);
+  const [animateEnabled, setAnimateEnabled] = useState(true);
+
+  let INTERSECTED;
+  let r_id = [];
+
+  const cancelAllAnimations = () => {
+    r_id.forEach(r => {
+      cancelAnimationFrame(r)
+    })
+  }
+
+  function onClick(event, camera, scene) {
+    event.preventDefault();
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+
+    const intersects = raycaster.intersectObjects(scene.children);
+    if (intersects.length > 0) {
+        if (INTERSECTED != intersects[0].object) {
+          INTERSECTED = intersects[0].object;
+        }
+    } else {
+        INTERSECTED = null;
+    }
+    
+  }
 
   useEffect(() => {
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 150000);
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -134,12 +204,19 @@ const Home = () => {
     const ambientLight = new THREE.AmbientLight(0xffffff, 1);
     scene.add(ambientLight);
 
+    const textureLoader = new THREE.TextureLoader();
+    textureLoader.load('https://t3.ftcdn.net/jpg/07/11/66/58/360_F_711665817_dDzaSBW2nZEwYtaXnxzwd5OYcuBCW4A1.jpg', (texture) => {
+      scene.background = texture;  
+    });
+
     const controls = new OrbitControls(camera, renderer.domElement); 
     controls.autoRotate = true
 
+    renderer.domElement.addEventListener('click', (event) => onClick(event, camera, scene), false);
+
     const loader = new GLTFLoader();
 
-    Planets.forEach((planet, index) => {
+    Planets.forEach(planet => {
       loader.load(planet.filename, (gltf) => {
         const model = gltf.scene;
         scene.add(model);
@@ -152,7 +229,7 @@ const Home = () => {
 
           let pts = new THREE.Path().absarc(0, 0, orbitRadius, 0, Math.PI * 2).getPoints(90);
           let g = new THREE.BufferGeometry().setFromPoints(pts);
-          let m = new THREE.LineBasicMaterial({ color: 'white', transparent: true, opacity: 1 });
+          let m = new THREE.LineBasicMaterial(planet.lineMaterial);
           g.rotateX(- Math.PI / 2);
           let l = new THREE.Line(g, m);
           
@@ -160,7 +237,7 @@ const Home = () => {
         }
 
         const animate = () => {
-          requestAnimationFrame(animate);
+          r_id.push(requestAnimationFrame(animate));
           model.rotation.y = planet.speedRotate.negative ? model.rotation.y - planet.speedRotate.value : model.rotation.y + planet.speedRotate.value;
           if (planet.name !== "sun") {
             let timestamp = Date.now() * 0.0001;
@@ -168,7 +245,7 @@ const Home = () => {
           }
           renderer.render(scene, camera);
         };
-        animate();
+        animate()
       }, undefined, (error) => {
         console.error('Error loading model:', error);
       });  
@@ -181,7 +258,11 @@ const Home = () => {
     };
   }, []);
 
-  return <div ref={mountRef}></div>;
+  return <div>
+    <h1 className='text-base'> NASA SPACE APP - VEDO TEAM - 0.1 SHOWCASE</h1>
+
+    <div className='base' ref={mountRef} />
+  </div>;
 };
 
 export default Home;
