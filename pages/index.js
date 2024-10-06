@@ -21,7 +21,7 @@ const Planets = [
     "scale": 17,
     "orbitRadius": 360,
     "position": 30,
-    "speed": 2,
+    "speed": 1.0,
     "filename": "./mercurio.gltf",
     "speedRotate": {
       "negative": false,
@@ -38,7 +38,7 @@ const Planets = [
     "scale": 25,
     "orbitRadius": 470,
     "position": 90,
-    "speed": 2.5,
+    "speed": 1.2,
     "filename": "./venus.gltf",
     "speedRotate": {
       "negative": false,
@@ -55,11 +55,11 @@ const Planets = [
     "scale": 1,
     "orbitRadius": 660,
     "position": 160,
-    "speed": 2.8,
+    "speed": 2.3,
     "filename": "./tierra.gltf",
     "speedRotate": {
       "negative": false,
-      "value": 0.0086
+      "value": 0.086
     },
     "lineMaterial": {
       "color": "brown",
@@ -73,7 +73,7 @@ const Planets = [
     "scale": 1,
     "orbitRadius": 890,
     "position": 160,
-    "speed": 2.1,
+    "speed": 1.7,
     "filename": "./marte.gltf",
     "speedRotate": {
       "negative": false,
@@ -90,7 +90,7 @@ const Planets = [
     "scale": 86,
     "orbitRadius": 1800,
     "position": 160,
-    "speed": 0.7,
+    "speed": 0.5,
     "filename": "./jupiter.gltf",
     "speedRotate": {
       "negative": false,
@@ -107,7 +107,7 @@ const Planets = [
     "scale": 76,
     "orbitRadius": 2600,
     "position": 160,
-    "speed": 0.5,
+    "speed": 0.3,
     "filename": "./saturno.gltf",
     "speedRotate": {
       "negative": false,
@@ -124,7 +124,7 @@ const Planets = [
     "scale": 58,
     "orbitRadius": 3500,
     "position": 160,
-    "speed": 0.3,
+    "speed": 0.2,
     "filename": "./urano.gltf",
     "speedRotate": {
       "negative": false,
@@ -205,7 +205,7 @@ const Home = () => {
     scene.add(ambientLight);
 
     const textureLoader = new THREE.TextureLoader();
-    textureLoader.load('https://t3.ftcdn.net/jpg/07/11/66/58/360_F_711665817_dDzaSBW2nZEwYtaXnxzwd5OYcuBCW4A1.jpg', (texture) => {
+    textureLoader.load('./public/360_F_461793247_aTvjPN7O4wuJiYieweyxzaO1K82y0cHb.jpg', (texture) => {
       scene.background = texture;  
     });
 
