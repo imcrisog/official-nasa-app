@@ -14,7 +14,7 @@ const Planets = [
     "speedRotate": {
       "negative": true,
       "value": 0.03
-    }
+    },
   },
   {
     "name": "Mercurio",
@@ -26,6 +26,11 @@ const Planets = [
     "speedRotate": {
       "negative": false,
       "value": 0.056
+    },
+    "lineMaterial": {
+      "color": "violet",
+      "transparent": true,
+      "opacity": 1
     }
   },
   {
@@ -38,6 +43,11 @@ const Planets = [
     "speedRotate": {
       "negative": false,
       "value": 0.020
+    },
+    "lineMaterial": {
+      "color": "light-blue",
+      "transparent": true,
+      "opacity": 1
     }
   },
   {
@@ -50,6 +60,11 @@ const Planets = [
     "speedRotate": {
       "negative": false,
       "value": 0.0086
+    },
+    "lineMaterial": {
+      "color": "brown",
+      "transparent": true,
+      "opacity": 1
     }
   },
 
@@ -63,6 +78,11 @@ const Planets = [
     "speedRotate": {
       "negative": false,
       "value": 0.087
+    },
+    "lineMaterial": {
+      "color": "red",
+      "transparent": true,
+      "opacity": 1
     }
   },
   {
@@ -75,7 +95,11 @@ const Planets = [
     "speedRotate": {
       "negative": false,
       "value": 0.035
-      
+    },
+    "lineMaterial": {
+      "color": "blue",
+      "transparent": true,
+      "opacity": 1
     }
   },
   {
@@ -88,6 +112,11 @@ const Planets = [
     "speedRotate": {
       "negative": false,
       "value": 0.038
+    },
+    "lineMaterial": {
+      "color": "green",
+      "transparent": true,
+      "opacity": 1
     }
   },
   {
@@ -100,6 +129,11 @@ const Planets = [
     "speedRotate": {
       "negative": false,
       "value": 0.061
+    },
+    "lineMaterial": {
+      "color": "purple",
+      "transparent": true,
+      "opacity": 1
     }
   },
   {
@@ -112,6 +146,11 @@ const Planets = [
     "speedRotate": {
       "negative": false,
       "value": 0.057
+    },
+    "lineMaterial": {
+      "color": "blue",
+      "transparent": true,
+      "opacity": 1
     }
   }
 ]
@@ -152,7 +191,7 @@ const Home = () => {
 
           let pts = new THREE.Path().absarc(0, 0, orbitRadius, 0, Math.PI * 2).getPoints(90);
           let g = new THREE.BufferGeometry().setFromPoints(pts);
-          let m = new THREE.LineBasicMaterial({ color: 'white', transparent: true, opacity: 1 });
+          let m = new THREE.LineBasicMaterial(planet.lineMaterial);
           g.rotateX(- Math.PI / 2);
           let l = new THREE.Line(g, m);
           
