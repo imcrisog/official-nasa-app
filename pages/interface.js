@@ -1,10 +1,9 @@
-import { useState } from "react";
-import { Planets } from "./index.js"
+import Planets from "./api/Planets.json"
 
 const Buttons = () => {
     return (<>
-        {Planets.map(planet => {
-            return <details className="gap-2 text-center" name="planets"> 
+        {Planets.map((planet, index) => {
+            return <details className="gap-2 text-center" name="planets" key={index}>
             <summary className="py-2"> {planet.name} </summary>
             <p>{planet.desc}</p>
         </details>
