@@ -6,7 +6,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 const Planets = [
   {
     "name": "Sun",
-    "scale": 3,
+    "scale": 10,
     "orbitRadius": null,
     "position": 0,
     "speed": 10,
@@ -19,7 +19,7 @@ const Planets = [
   {
     "name": "Mercurio",
     "scale": 17,
-    "orbitRadius": 190,
+    "orbitRadius": 360,
     "position": 30,
     "speed": 2,
     "filename": "./mercurio.gltf",
@@ -31,7 +31,7 @@ const Planets = [
   {
     "name": "Venus",
     "scale": 25,
-    "orbitRadius": 300,
+    "orbitRadius": 470,
     "position": 90,
     "speed": 2.5,
     "filename": "./venus.gltf",
@@ -43,20 +43,20 @@ const Planets = [
   {
     "name": "Tierra",
     "scale": 1,
-    "orbitRadius": 460,
+    "orbitRadius": 660,
     "position": 160,
-    "speed": 5,
+    "speed": 2.8,
     "filename": "./tierra.gltf",
     "speedRotate": {
-      "negative": false,
-      "value": 0.0086
+      "negative": false, 
+      "value": 0.086
     }
   },
 
   {
     "name": "Marte",
     "scale": 1,
-    "orbitRadius": 590,
+    "orbitRadius": 890,
     "position": 160,
     "speed": 2.1,
     "filename": "./marte.gltf",
@@ -68,7 +68,7 @@ const Planets = [
   {
     "name": "Jupiter",
     "scale": 86,
-    "orbitRadius": 950,
+    "orbitRadius": 1800,
     "position": 160,
     "speed": 0.7,
     "filename": "./jupiter.gltf",
@@ -81,7 +81,7 @@ const Planets = [
   {
     "name": "Saturno",
     "scale": 76,
-    "orbitRadius": 1500,
+    "orbitRadius": 2600,
     "position": 160,
     "speed": 0.5,
     "filename": "./saturno.gltf",
@@ -93,7 +93,7 @@ const Planets = [
   {
     "name": "Urano",
     "scale": 58,
-    "orbitRadius": 2000,
+    "orbitRadius": 3500,
     "position": 160,
     "speed": 0.3,
     "filename": "./urano.gltf",
@@ -105,7 +105,7 @@ const Planets = [
   {
     "name": "Neptuno",
     "scale": 58,
-    "orbitRadius": 2600,
+    "orbitRadius": 4060,
     "position": 160,
     "speed": 0.2,
     "filename": "./neptuno.gltf",
